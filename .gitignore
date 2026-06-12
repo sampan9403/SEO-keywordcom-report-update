@@ -1,0 +1,14 @@
+# Credentials — never commit
+Google-Slides-Keys.json
+.streamlit/secrets.toml
+
+# Sample / test data files
+*.csv
+*.xlsx
+*.xls
+~$*
+
+# Python
+__pycache__/
+*.py[cod]
+.env
