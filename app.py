@@ -65,15 +65,16 @@ if missing:
 # Parse GSC file — supports CSV or Excel
 try:
     if gsc_file.name.lower().endswith(".csv"):
-        for enc in ["utf-8", "utf-16", "utf-8-sig", "latin-1"]:
-            try:
-                gsc_file.seek(0)
-                gsc_raw = pd.read_csv(gsc_file, header=None, encoding=enc)
-                break
-            except (UnicodeDecodeError, Exception):
-                continue
+        import io
+        gsc_file.seek(0)
+        raw = gsc_file.read()
+        if raw[:2] in (b'\xff\xfe', b'\xfe\xff'):
+            content = raw.decode('utf-16')
+        elif raw[:3] == b'\xef\xbb\xbf':
+            content = raw.decode('utf-8-sig')
         else:
-            raise ValueError("Could not decode GSC CSV with utf-8, utf-16, utf-8-sig, or latin-1.")
+            content = raw.decode('utf-8', errors='replace')
+        gsc_raw = pd.read_csv(io.StringIO(content), header=None)
     else:
         gsc_raw = pd.read_excel(gsc_file, sheet_name="Queries", header=None)
 except Exception as e:
