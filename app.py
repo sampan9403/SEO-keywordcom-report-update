@@ -28,7 +28,7 @@ with col1:
 
 with col2:
     st.subheader("2. GSC Performance Data")
-    gsc_file = st.file_uploader("Upload GSC Excel (.xlsx)", type=["xlsx", "xls"])
+    gsc_file = st.file_uploader("Upload GSC Export (.csv / .xlsx)", type=["csv", "xlsx", "xls"])
 
 st.subheader("3. Google Slides URL")
 slides_url = st.text_input(
@@ -54,11 +54,14 @@ if missing:
     st.error(f"Missing columns in keyword.com CSV: {missing}")
     st.stop()
 
-# Parse GSC Excel — read without header, use row 0 as date-range header, row 1+ as data
+# Parse GSC file — supports CSV or Excel
 try:
-    gsc_raw = pd.read_excel(gsc_file, sheet_name="Queries", header=None)
+    if gsc_file.name.lower().endswith(".csv"):
+        gsc_raw = pd.read_csv(gsc_file, header=None)
+    else:
+        gsc_raw = pd.read_excel(gsc_file, sheet_name="Queries", header=None)
 except Exception as e:
-    st.error(f"Failed to read GSC Excel: {e}")
+    st.error(f"Failed to read GSC file: {e}")
     st.stop()
 
 # Show the date ranges detected so the user can verify column mapping
