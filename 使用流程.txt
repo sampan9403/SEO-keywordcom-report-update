@@ -1,0 +1,54 @@
+Keyword Performance Report Generator — 使用流程
+================================================
+
+工具網址：https://seo-keywordcom-report-update-7nezbwr8wpwsofbxs4katd.streamlit.app/
+推薦輸出 Slide：https://docs.google.com/presentation/d/1TLQOQOAOhL3k9htchljFyd7N6cWoqEizVvanaMtaESk/edit
+
+
+STEP 1｜匯出 keyword.com CSV
+──────────────────────────────
+1. 登入 https://app.keyword.com/dashboard
+2. 選擇對應的 Project
+3. 勾選你想生成 Slide 的 Keywords（不需要全選，每一個 keyword 對應一頁 Slide）
+4. 點擊 Export → 選 CSV 格式下載
+5. 保留下載的 CSV 檔案備用
+
+
+STEP 2｜匯出 GSC 對比數據
+──────────────────────────────
+1. 登入 Google Search Console → 選擇對應網站
+2. 左側選單：Performance → Search Results
+3. 右上角日期範圍 → 選「Compare」模式
+   - 建議設定：Last 6 months vs Previous 6 months
+4. 點擊「Pages」分頁旁邊的「Queries」分頁（確保顯示 keywords）
+5. 右上角 Export → 下載 CSV 或 Excel (.xlsx)
+   注意：Column 順序需要為
+   - Column B = Last 6 months Clicks
+   - Column C = Previous 6 months Clicks
+   - Column D = Last 6 months Impressions
+   - Column E = Previous 6 months Impressions
+
+
+STEP 3｜使用工具生成 Slides
+──────────────────────────────
+1. 打開工具網址
+2. 上傳 keyword.com CSV（Step 1 下載的檔案）
+3. 上傳 GSC 檔案（Step 2 下載的 CSV 或 Excel）
+4. 工具會顯示 Preview Table：
+   - 確認 keyword 列表正確
+   - 留意「GSC Match」欄，✓ = 成功匹配 GSC 數據，✗ = 該 keyword 在 GSC 找不到
+5. 在「Google Slides URL」欄位貼上 Presentation 連結
+   推薦使用：https://docs.google.com/presentation/d/1TLQOQOAOhL3k9htchljFyd7N6cWoqEizVvanaMtaESk/edit
+6. 按「Generate Slides」按鈕
+7. 等待生成完成（每頁約 1-2 秒）
+8. 完成後點擊連結直接開啟 Presentation 查看結果
+
+
+注意事項
+──────────────────────────────
+- GSC keyword matching 為 exact match（大小寫不敏感）
+  如 keyword.com 是「Print Shop」，GSC 需要有完全一樣的文字才能匹配
+- 生成的 Slides 會插入在 Presentation 最前面（第 1 頁起）
+- 如需重新生成，請先手動刪除 Presentation 內已生成的頁面，再重新執行
+- Presentation 需要已分享給 Service Account：
+  sam-owlish@bamboo-chemist-425504-f7.iam.gserviceaccount.com（Editor 權限）

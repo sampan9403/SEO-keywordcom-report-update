@@ -7,17 +7,56 @@ from slide_builder import extract_presentation_id, build_keyword_slides
 st.set_page_config(page_title="Keyword Performance Report", page_icon="📊", layout="wide")
 st.title("Keyword Performance Report Generator")
 
-# ── Sidebar: credentials info ────────────────────────────────────────────────
+# ── Sidebar: usage guide + credentials ───────────────────────────────────────
 with st.sidebar:
-    st.subheader("Setup")
+    st.subheader("使用流程")
+
+    st.markdown("**Step 1 — 匯出 keyword.com CSV**")
+    st.markdown(
+        "1. 登入 [keyword.com](https://app.keyword.com/dashboard)\n"
+        "2. 選擇 Project，勾選想生成 Slide 的 Keywords\n"
+        "3. Export → CSV 下載\n"
+        "> 每個 keyword = 一頁 Slide"
+    )
+
+    st.markdown("**Step 2 — 匯出 GSC 對比數據**")
+    st.markdown(
+        "1. 登入 Google Search Console\n"
+        "2. Performance → Search Results\n"
+        "3. 日期範圍選 **Compare** 模式（建議 Last 6M vs Previous 6M）\n"
+        "4. 切換到 **Queries** 分頁\n"
+        "5. Export → CSV 或 Excel 下載\n"
+        "> Column 順序需為：B=Last 6M Clicks, C=Prev 6M Clicks, D=Last 6M Impressions, E=Prev 6M Impressions"
+    )
+
+    st.markdown("**Step 3 — 填寫工具並生成**")
+    st.markdown(
+        "1. 上傳 keyword.com CSV\n"
+        "2. 上傳 GSC 檔案\n"
+        "3. 確認 Preview Table 的 GSC Match 狀態\n"
+        "4. 貼上 Google Slides URL\n"
+        "5. 按 **Generate Slides**\n"
+        "> 推薦使用 Presentation："
+    )
+    st.markdown(
+        "[開啟 Bannershop Progress Report ↗](https://docs.google.com/presentation/d/"
+        "1TLQOQOAOhL3k9htchljFyd7N6cWoqEizVvanaMtaESk/edit)"
+    )
+
+    st.markdown("---")
+    st.markdown("**注意事項**")
+    st.markdown(
+        "- GSC matching 為 exact match（大小寫不敏感）\n"
+        "- Slides 插入在 Presentation **最前面**\n"
+        "- 重新生成前請先手動刪除舊頁面"
+    )
+
+    st.markdown("---")
     sa_email = get_service_account_email()
     if sa_email:
-        st.info(f"Share your Google Slides presentation with:\n\n`{sa_email}`")
+        st.info(f"Presentation 需分享給 Service Account（Editor）：\n\n`{sa_email}`")
     else:
         st.warning("Service account credentials not configured.")
-    st.markdown("---")
-    st.caption("Columns used from keyword.com CSV: Keyword, Start, Best, Google, Search Volume, Ranking URL")
-    st.caption("GSC columns: col B = last 6M clicks, col C = prev 6M clicks, col D = last 6M impressions, col E = prev 6M impressions")
 
 # ── File uploads ─────────────────────────────────────────────────────────────
 col1, col2 = st.columns(2)
