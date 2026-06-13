@@ -41,9 +41,17 @@ if not (kw_file and gsc_file):
     st.info("Upload both files to continue.")
     st.stop()
 
-# Parse keyword.com CSV
+# Parse keyword.com CSV — try common encodings
 try:
-    kw_df = pd.read_csv(kw_file)
+    for enc in ["utf-8", "utf-16", "utf-8-sig", "latin-1"]:
+        try:
+            kw_file.seek(0)
+            kw_df = pd.read_csv(kw_file, encoding=enc)
+            break
+        except (UnicodeDecodeError, Exception):
+            continue
+    else:
+        raise ValueError("Could not decode file with utf-8, utf-16, utf-8-sig, or latin-1.")
 except Exception as e:
     st.error(f"Failed to read keyword.com CSV: {e}")
     st.stop()
