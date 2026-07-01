@@ -1,8 +1,23 @@
 import streamlit as st
 import pandas as pd
+import requests
 
 from config import get_credentials, get_service_account_email
 from slide_builder import extract_presentation_id, build_keyword_slides
+
+LOG_WEBHOOK = "https://owlishonlineseo.app.n8n.cloud/webhook/seo-tool-hub-log"
+
+def _log_usage(action: str, output_count: int, duration_seconds: float, status: str):
+    try:
+        requests.post(LOG_WEBHOOK, json={
+            "tool_name": "keyword-report",
+            "action": action,
+            "output_count": output_count,
+            "duration_seconds": round(duration_seconds, 1),
+            "status": status,
+        }, timeout=5)
+    except Exception:
+        pass
 
 st.set_page_config(page_title="Keyword Performance Report", page_icon="📊", layout="wide")
 st.title("Keyword Performance Report Generator")
@@ -213,6 +228,8 @@ if st.button("Generate Slides", type="primary"):
 
         from slide_builder import _build_single_slide
 
+        _start = time.time()
+
         for i, item in enumerate(kw_list):
             kw_label = str(item["row"]["Keyword"])
             status.write(f"Creating slide {i + 1}/{total}: **{kw_label}**")
@@ -220,11 +237,14 @@ if st.button("Generate Slides", type="primary"):
             progress.progress((i + 1) / total, text=f"{i + 1}/{total} slides done")
             time.sleep(0.4)
 
+        _duration = time.time() - _start
         progress.progress(1.0, text="Done!")
         status.empty()
         st.success(f"✅ {total} slides generated successfully.")
         st.markdown(f"[Open Presentation ↗]({slides_url})", unsafe_allow_html=False)
+        _log_usage("generate_slides", total, _duration, "success")
 
     except Exception as e:
+        _log_usage("generate_slides", 0, 0, "error")
         st.error(f"Error during slide generation: {e}")
         raise
